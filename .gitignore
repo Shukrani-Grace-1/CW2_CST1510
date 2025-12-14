@@ -5,8 +5,8 @@
 .env
 
 #python cache
-_pycache_/
-*._pyc
+__pycache__/
+*.pyc
 *.pyo
 
 #virtual env
