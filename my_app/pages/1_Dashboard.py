@@ -112,7 +112,7 @@ inc_tab, ticket_tab = st.tabs(["🛡️ Cyber Incidents", "🎫 IT Tickets"])
 
 
 # -----------------------------
-# Incidents domain
+# CIBERSECURITY: Incidents domain
 # -----------------------------
 with inc_tab:
     incidents = _load_incidents()
@@ -259,7 +259,7 @@ with inc_tab:
 
 
 # -----------------------------
-# Tickets domain
+# IT Tickets domain
 # -----------------------------
 with ticket_tab:
     tickets = _load_tickets()
