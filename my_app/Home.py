@@ -22,10 +22,13 @@ st.title("🔐 Welcome")
 if st.session_state.logged_in:
     st.success(f"Already logged in as **{st.session_state.username}**.")
 
-    if st.button("Go to dashboard"):
-        # Use the official navigation API to switch pages
-        st.switch_page("pages/1_Dashboard.py") 
-        # path is relative to Home.py :contentReference[oaicite:1]{index=1}
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Go to dashboard"):
+            st.switch_page("pages/1_Dashboard.py")
+    with col2:
+        if st.button("Go to chat"):
+            st.switch_page("pages/2_Chat.py")
     st.stop() # Don’t show login/register again
 
 
@@ -37,16 +40,13 @@ tab_login, tab_register = st.tabs(["Login", "Register"])
 with tab_login:
     st.subheader("Login")
 
-    login_username = st.text_input("Username",
-    key="login_username")
+    login_username = st.text_input("Username", key="login_username")
+    login_password = st.text_input("Password", type="password", key="login_password")
 
-    login_password = st.text_input("Password", type="password",
-    key="login_password")
-    
     if st.button("Log in", type="primary"):
-    # Simple credential check (for teaching only – not secure!)
+        # Simple credential check (for teaching only – not secure!)
         users = st.session_state.users
-        if login_username in users and users[login_username] ==login_password:
+        if login_username in users and users[login_username] == login_password:
             st.session_state.logged_in = True
             st.session_state.username = login_username
             st.success(f"Welcome back, {login_username}! 🎉 ")
@@ -65,17 +65,16 @@ with tab_register:
     new_password = st.text_input("Choose a password", type="password", key="register_password")
     confirm_password = st.text_input("Confirm password", type="password", key="register_confirm")
 
-if st.button("Create account"):
-
-    # Basic checks 
-    if not new_username or not new_password:
-        st.warning("Please fill in all fields.")
-    elif new_password != confirm_password:
-        st.error("Passwords do not match.")
-    elif new_username in st.session_state.users:
-        st.error("Username already exists. Choose another one.")
-    else:
-        # "Save" user in our simple in-memory store
-        st.session_state.users[new_username] = new_password
-        st.success("Account created! You can now log in from the Login tab.")
-        st.info("Tip: go to the Login tab and sign in with your new account.")
+    if st.button("Create account"):
+        # Basic checks
+        if not new_username or not new_password:
+            st.warning("Please fill in all fields.")
+        elif new_password != confirm_password:
+            st.error("Passwords do not match.")
+        elif new_username in st.session_state.users:
+            st.error("Username already exists. Choose another one.")
+        else:
+            # "Save" user in our simple in-memory store
+            st.session_state.users[new_username] = new_password
+            st.success("Account created! You can now log in from the Login tab.")
+            st.info("Tip: go to the Login tab and sign in with your new account.")
