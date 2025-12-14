@@ -1,3 +1,9 @@
+from pathlib import Path
+import sys
+
+# Ensure repo root is on PYTHONPATH so `import app...` works in Streamlit pages
+_repo_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(_repo_root))
 import streamlit as st
 from openai import OpenAI
 

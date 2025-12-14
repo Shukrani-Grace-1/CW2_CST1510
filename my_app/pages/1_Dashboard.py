@@ -1,3 +1,11 @@
+from pathlib import Path
+import sys
+
+# Ensure repo root is on PYTHONPATH so `import app...` works in Streamlit pages
+# pages/1_Dashboard.py -> pages -> my_app -> <repo root>
+_repo_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(_repo_root))
+
 import streamlit as st
 import pandas as pd
 
@@ -15,7 +23,7 @@ if not st.session_state.logged_in:
         st.switch_page("Home.py")
     st.stop()
 
-# ---- Imports that depend on your app code ----
+# ---- Imports that depend on the app code ----
 from app.data.db import connect_database
 from app.data.incidents import (
     get_all_incidents,
@@ -175,21 +183,6 @@ with inc_tab:
         finally:
             conn.close()
         _bar_chart(high_by_status, x="status", y="count", title="High Severity Incidents by Status")
-
-    # Incidents over time (based on the date column)
-    # Keep it easy: group by date string (YYYY-MM-DD)
-    if "date" in filt.columns and len(filt) > 0:
-        tmp = filt.copy()
-        tmp["date"] = pd.to_datetime(tmp["date"], errors="coerce")
-        tmp = tmp.dropna(subset=["date"])
-        if len(tmp) > 0:
-            daily = (
-                tmp.assign(day=tmp["date"].dt.date)
-                .groupby("day", as_index=False)
-                .size()
-                .rename(columns={"size": "count"})
-            )
-            _line_chart(daily, x="day", y="count", title="Incidents Over Time")
 
     st.divider()
 
