@@ -19,6 +19,10 @@ SYSTEM_PROMPTS = {
 }
 
 
+# STEP 0: Domain selection (default domain)
+st.session_state.setdefault("domain", "Cybersecurity")
+
+
 # Page configuration 
 st.set_page_config(
     page_title="ChatGPT Assistant",
@@ -33,24 +37,11 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 st.title("💬 ChatGPT - OpenAI API")
 st.caption("Powered by GPT-4o")
 
-# STEP 0: Domain selection (setting default domain as cybersecurity)
-if "domain" not in st.session_state:
-    st.session_state.domain = "Cybersecurity"
-
-
 # STEP 1: Initialize session state 
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": SYSTEM_PROMPTS[st.session_state.domain]}
     ]
-
-# Change of domain
-if st.session_state.get("current_domain") != st.session_state.domain:
-    st.session_state.current_domain = st.session_state.domain
-    st.session_state.messages = [
-        {"role": "system", "content": SYSTEM_PROMPTS[st.session_state.domain]}
-    ]
-    st.rerun()
 
 # Sidebar controls
 with st.sidebar:
@@ -63,7 +54,7 @@ with st.sidebar:
     # Clear chat button
     if st.button("🗑️ Clear Chat", use_container_width=True):
         st.session_state.messages = [
-            {"role": "system", "content": "You are a helpful assistant."}
+            {"role": "system", "content": SYSTEM_PROMPTS[st.session_state.domain]}
         ]
         st.rerun()
 
@@ -85,11 +76,19 @@ with st.sidebar:
     )
 
     # Domain selection
-    st.session_state.domain = st.selectbox(
+    st.selectbox(
         "Domain",
         ["Cybersecurity", "IT Operations"],
+        key="domain",
     )
 
+# If the domain changes, reset the conversation to the correct system prompt
+if st.session_state.get("current_domain") != st.session_state.domain:
+    st.session_state.current_domain = st.session_state.domain
+    st.session_state.messages = [
+        {"role": "system", "content": SYSTEM_PROMPTS[st.session_state.domain]}
+    ]
+    st.rerun()
 
 # STEP 2: Display chat history
 for message in st.session_state.messages:
