@@ -1,12 +1,10 @@
-
+import streamlit as st
 
 from openai import OpenAI
 import os
 
 #load api key from environement variable
-client = OpenAI(
-    api_key="REDACTED"
-)
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 #context aware prompt
 
