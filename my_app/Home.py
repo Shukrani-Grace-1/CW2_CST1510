@@ -67,7 +67,7 @@ with tab_register:
 
 if st.button("Create account"):
 
-    # Basic checks – again, just for teaching
+    # Basic checks 
     if not new_username or not new_password:
         st.warning("Please fill in all fields.")
     elif new_password != confirm_password:
