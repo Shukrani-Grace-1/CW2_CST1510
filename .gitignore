@@ -11,3 +11,17 @@ __pycache__/
 
 #virtual env
 .venv/
+
+#macOS
+.DS_Store
+
+#sqlite database (generated locally)
+DATA/*.db
+*.db
+
+#local tooling files
+replacements.txt
+
+.DS_Store
+DATA/intelligence_platform.db
+replacements.txt
